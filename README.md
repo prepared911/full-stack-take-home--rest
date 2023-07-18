@@ -25,6 +25,9 @@ Before you get started, here are a few things to remember:
   - Feel free to use `Box`, other MUI components, or, create a CSS file. It's entirely up to you!
 - This project contains examples of how to do everything that is required as part of the assignment.
   - If you can't find what you're looking for in the documentation of the tools used in this project, try looking through the repo for some examples!
+- The console has no state management besides React's `useState` hook
+  - Feel free to introduce a state management solution! Whether it's [React's built-in context](https://react.dev/learn/passing-data-deeply-with-context), [Redux](https://redux.js.org/), [React Query](https://tanstack.com/query/v3/docs/react/quick-start), or something else!
+  - That said, you also _do not have to_ introduce anything! If you want to simply use the `useState` hook, go for it!
 
 Alright, let's get started! 🚀
 
