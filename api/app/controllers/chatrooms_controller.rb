@@ -21,7 +21,7 @@ class ChatroomsController < ApplicationController
   end
 
   def update
-    chatroom = Chatroom.find_by(params[:id])
+    chatroom = Chatroom.find(params[:id])
     chatroom.update!(description: params[:description])
 
     render json: chatroom, include: ['nature_code']
