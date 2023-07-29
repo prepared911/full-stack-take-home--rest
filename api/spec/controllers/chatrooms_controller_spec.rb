@@ -89,7 +89,7 @@ RSpec.describe ChatroomsController, type: :request do
         patch chatroom_path(id), params: params
         response_chatroom = JSON.parse(response.body)
 
-        chatroom = Chatroom.find(response_chatroom["id"])
+        chatroom = Chatroom.find(id)
         expect(chatroom.description).to eq("new description")
   
         expect(response_chatroom["description"]).to eq("new description")
@@ -98,7 +98,7 @@ RSpec.describe ChatroomsController, type: :request do
         patch chatroom_path(id2), params: params2
         response_chatroom2 = JSON.parse(response.body)
 
-        chatroom2 = Chatroom.find(response_chatroom2["id"])
+        chatroom2 = Chatroom.find(id2)
         expect(chatroom2.description).to eq("new description2")
   
         expect(response_chatroom2["description"]).to eq("new description2")
