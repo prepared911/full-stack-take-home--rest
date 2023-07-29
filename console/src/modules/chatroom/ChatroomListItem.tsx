@@ -9,11 +9,13 @@ import {
   styled,
   TextField,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
 
 import { ChatroomTags } from "./ChatroomTags";
 import React from "react";
+import { api } from "../utils/api";
 
 const ChatroomCard = styled(Card)<CardProps>(({ theme }) => ({
   display: "flex",
@@ -26,12 +28,27 @@ export type ChatroomListItemProps = {
   chatroom: Chatroom;
 };
 
+type UpdateChatroomParams = {
+  id: number;
+  description: string | null;
+};
+
+async function updateChatroom(params: UpdateChatroomParams): Promise<Chatroom> {
+  console.log({params})
+  const response = await api.patch<Chatroom>(`/chatrooms/${params.id}`, {
+    description: params.description,
+  });
+  console.log({response})
+  return response.data;
+}
+
 export const ChatroomListItem: React.FC<ChatroomListItemProps> = ({
   chatroom,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [editDescription, setEditDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState(chatroom.description);
+  const [loadingSave, setLoadingSave] = useState(false);
 
   const natureCodeName = chatroom.nature_code?.name ?? "Uncategorized";
 
@@ -40,8 +57,12 @@ export const ChatroomListItem: React.FC<ChatroomListItemProps> = ({
     setEditDescription(false);
   }
 
-  const handleSave = () => {
-    // TODO: save description to chatroom
+  const handleSave = async () => {
+    setLoadingSave(true);
+    console.log({chatroom});
+    const updatedChatroom =  await updateChatroom({id: chatroom.id, description: editedDescription});
+    chatroom.description = updatedChatroom.description;
+    setLoadingSave(false);
     setEditDescription(false);
   }
 
@@ -101,11 +122,11 @@ export const ChatroomListItem: React.FC<ChatroomListItemProps> = ({
                     variant="contained"
                     color="primary"
                     type="submit"
-                    // startIcon={
-                    //   isSubmitting ? (
-                    //     <CircularProgress color="inherit" sx={{ fontSize: "1em" }} />
-                    //   ) : null
-                    // }
+                    startIcon={
+                      loadingSave ? (
+                        <CircularProgress color="inherit" sx={{ fontSize: "1em" }} />
+                      ) : null
+                    }
                     onClick={handleSave}
                   >
                     Save
