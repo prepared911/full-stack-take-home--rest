@@ -19,4 +19,13 @@ class ChatroomsController < ApplicationController
   rescue StandardError => exception
     render json: { error: exception.message }, status: :bad_request
   end
+
+  def update
+    chatroom = Chatroom.find_by(params[:id])
+    chatroom.update!(description: params[:description])
+
+    render json: chatroom, include: ['nature_code']
+  rescue StandardError => exception
+    render json: { error: exception.message }, status: :bad_request
+  end
 end
