@@ -77,19 +77,31 @@ RSpec.describe ChatroomsController, type: :request do
 
   describe "#update" do
     let(:newChatroom) { create(:chatroom) }
+    let(:newChatroom2) { create(:chatroom) }
     
     context "when valid params are provided" do
       let(:id) { newChatroom.id }
       let(:params) { { description: "new description" } }
+      let(:id2) { newChatroom2.id }
+      let(:params2) { { description: "new description2" } }
       it "updates and returns the chatroom" do
+        # update newChatroom
         patch chatroom_path(id), params: params
-  
         response_chatroom = JSON.parse(response.body)
 
         chatroom = Chatroom.find(response_chatroom["id"])
         expect(chatroom.description).to eq("new description")
   
         expect(response_chatroom["description"]).to eq("new description")
+
+        # update newChatroom2
+        patch chatroom_path(id2), params: params2
+        response_chatroom2 = JSON.parse(response.body)
+
+        chatroom2 = Chatroom.find(response_chatroom2["id"])
+        expect(chatroom2.description).to eq("new description2")
+  
+        expect(response_chatroom2["description"]).to eq("new description2")
       end
     end
   end
