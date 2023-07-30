@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ChatroomsList } from "./ChatroomsList";
 import { CreateChatroomModal } from "./CreateChatroomModal";
 import { useFetchChatrooms } from "./useFetchChatrooms";
+import React from "react";
 
 export const ChatroomsPage: React.FC = () => {
   const { loading, fetchChatrooms } = useFetchChatrooms();
@@ -13,6 +14,10 @@ export const ChatroomsPage: React.FC = () => {
   useEffect(() => {
     fetchChatrooms().then(setChatrooms);
   }, []);
+
+  const refreshChatrooms = () => {
+    fetchChatrooms().then(setChatrooms);
+  };
 
   const addNewChatroom = (chatroom: Chatroom) => {
     setChatrooms([chatroom, ...chatrooms]);
@@ -33,7 +38,11 @@ export const ChatroomsPage: React.FC = () => {
           New Chatroom
         </Button>
       </Box>
-      <ChatroomsList loading={loading} chatrooms={chatrooms} />
+      <ChatroomsList
+        loading={loading}
+        chatrooms={chatrooms}
+        refreshChatrooms={refreshChatrooms}
+      />
       <CreateChatroomModal
         open={showCreateChatroomModal}
         onSubmit={addNewChatroom}
