@@ -22,7 +22,13 @@ class ChatroomsController < ApplicationController
 
   def update
     chatroom = Chatroom.find(params[:id])
-    chatroom.update!(description: params[:description])
+    if params[:description]
+      chatroom.update!(description: params[:description])
+    end
+
+    if !params[:resolved].nil?
+      chatroom.update!(resolved: params[:resolved])
+    end
 
     render json: chatroom, include: ['nature_code']
   rescue StandardError => exception

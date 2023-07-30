@@ -76,7 +76,7 @@ RSpec.describe ChatroomsController, type: :request do
   end
 
   describe "#update" do
-    let(:newChatroom) { create(:chatroom) }
+    let(:newChatroom) { create(:chatroom, resolved: false, description: 'Chatroom description') }
     let(:newChatroom2) { create(:chatroom) }
     
     context "when valid params are provided" do
@@ -102,6 +102,23 @@ RSpec.describe ChatroomsController, type: :request do
         expect(chatroom2.description).to eq("new description2")
   
         expect(response_chatroom2["description"]).to eq("new description2")
+      end
+    end
+
+    context "when only one field is supplied" do
+      let(:id) { newChatroom.id }
+      let(:params) { { resolved: true } }
+      it "only updates one field" do
+        # update newChatroom
+        patch chatroom_path(id), params: params
+        response_chatroom = JSON.parse(response.body)
+
+        chatroom = Chatroom.find(id)
+        expect(chatroom.description).to eq("Chatroom description")
+        expect(chatroom.resolved).to eq(true)
+  
+        expect(response_chatroom["description"]).to eq("Chatroom description")
+        expect(response_chatroom["resolved"]).to eq(true)
       end
     end
   end
